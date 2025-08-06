@@ -1,0 +1,131 @@
+════════════════════════════════════════════════════════════════════════════════════════════════════════
+                                RAG CHATBOT QUERY PROCESSING FLOW
+════════════════════════════════════════════════════════════════════════════════════════════════════════
+
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   FRONTEND      │    │  BACKEND API    │    │  AI GENERATOR   │    │  VECTOR STORE   │
+│   (HTML/JS)     │    │   (FastAPI)     │    │ (Anthropic)     │    │   (ChromaDB)    │
+│                 │    │                 │    │                 │    │                 │
+│ • Chat Interface│    │ • app.py        │    │ • ai_generator  │    │ • vector_store  │
+│ • Event Handlers│    │ • /api/query    │    │ • Tool execution│    │ • Semantic search│
+│ • API Client    │    │ • Session mgmt  │    │ • Response gen  │    │ • Course metadata│
+└─────────────────┘    └─────────────────┘    └─────────────────┘    └─────────────────┘
+
+    │                      │                      │                      │
+    │ ① User Input         │                      │                      │
+    │                      │                      │                      │
+    ▼                      │                      │                      │
+┌─────────────────┐        │                      │                      │
+│  sendMessage()  │        │                      │                      │
+│                 │        │                      │                      │
+│ • Get query     │        │                      │                      │
+│ • Show loading  │        │                      │                      │
+│ • Disable input │        │                      │                      │
+└─────────────────┘        │                      │                      │
+    │                      │                      │                      │
+    │ ② POST Request       │                      │                      │
+    │                      │                      │                      │
+    ├─────────────────────►│                      │                      │
+                           │                      │                      │
+                           ▼                      │                      │
+                     ┌─────────────────┐          │                      │
+                     │ query_documents │          │                      │
+                     │                 │          │                      │
+                     │ • Parse request │          │                      │
+                     │ • Create session│          │                      │
+                     │ • Call RAG      │          │                      │
+                     └─────────────────┘          │                      │
+                           │                      │                      │
+                           │ ③ Process Query      │                      │
+                           │                      │                      │
+                           ▼                      │                      │
+                     ┌─────────────────┐          │                      │
+                     │   RAG SYSTEM    │          │                      │
+                     │  (rag_system)   │          │                      │
+                     │                 │          │                      │
+                     │ • Get history   │          │                      │
+                     │ • Tool setup    │          │                      │
+                     │ • Generate resp │ ────────►│                      │
+                     └─────────────────┘          │                      │
+                                                  │ ④ AI Processing      │
+                                                  │                      │
+                                                  ▼                      │
+                                            ┌─────────────────┐          │
+                                            │generate_response│          │
+                                            │                 │          │
+                                            │ • System prompt │          │
+                                            │ • Tool available│          │
+                                            │ • Claude API    │          │
+                                            └─────────────────┘          │
+                                                  │                      │
+                                                  │ ⑤ Tool Decision      │
+                                                  │                      │
+                                                  ▼                      │
+                                            ┌─────────────────┐          │
+                                            │  SEARCH TOOL    │          │
+                                            │ (search_tools)  │          │
+                                            │                 │          │
+                                            │ • CourseSearch  │          │
+                                            │ • Format query  │          │
+                                            │ • Execute search│ ────────►│
+                                            └─────────────────┘          │
+                                                                         │ ⑥ Vector Search
+                                                                         │
+                                                                         ▼
+                                                                   ┌─────────────────┐
+                                                                   │     search()    │
+                                                                   │                 │
+                                                                   │ • Embedding     │
+                                                                   │ • Similarity    │
+                                                                   │ • Filter results│
+                                                                   └─────────────────┘
+                                                                         │
+                                                    ⑦ Results            │
+                     ┌─────────────────┐          ◄────────────────────────┘
+                     │SESSION MANAGER  │          │
+                     │                 │          │
+                     │ • Conversation  │          ▼
+                     │   history       │    ┌─────────────────┐
+                     │ • Context       │    │ _format_results │
+                     │   tracking      │    │                 │
+                     └─────────────────┘    │ • Course context│
+                           │                │ • Source tracking│
+                           │                │ • Return formatted│
+                           │                └─────────────────┘
+                           │                      │
+                           │ ⑧ Response           │
+    ┌─────────────────┐    ◄────────────────────────┘
+    │ Frontend Update │    │
+    │                 │    │
+    │ • Remove loading│    │
+    │ • Render answer │    │
+    │ • Show sources  │    │
+    │ • Update session│    │
+    └─────────────────┘    │
+
+════════════════════════════════════════════════════════════════════════════════════════════════════════
+                                        DATA FLOW LEGEND
+════════════════════════════════════════════════════════════════════════════════════════════════════════
+
+① User types query and clicks send button
+② HTTP POST to /api/query with {query, session_id}
+③ FastAPI routes to query handler, creates/gets session
+④ RAG system calls AI generator with tools and history
+⑤ Claude decides if search is needed, executes search tool
+⑥ Search tool performs vector similarity search in ChromaDB
+⑦ Results formatted with course/lesson context
+⑧ Response returned through API layers to frontend
+
+Key Components:
+• Frontend (script.js): User interface and API communication
+• Backend (app.py): FastAPI endpoints and request handling
+• RAG System (rag_system.py): Query orchestration
+• AI Generator (ai_generator.py): Claude API integration
+• Search Tools (search_tools.py): Vector search coordination
+• Vector Store (vector_store.py): ChromaDB operations
+• Session Manager: Conversation history tracking
+
+Process Flow: User Input → API Request → RAG Processing → AI Analysis → Vector Search → Response Assembly
+Data Flow: Query → Session → Tools → Search → Results → Sources → Answer → UI Update
+
+════════════════════════════════════════════════════════════════════════════════════════════════════════

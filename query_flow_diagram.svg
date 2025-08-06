@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="900" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font: bold 18px sans-serif; text-anchor: middle; fill: #2c3e50; }
+      .component { font: 14px sans-serif; text-anchor: middle; fill: white; }
+      .step-text { font: 12px sans-serif; text-anchor: start; fill: #34495e; }
+      .arrow { stroke: #e74c3c; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .data-flow { stroke: #3498db; stroke-width: 2; fill: none; marker-end: url(#arrowhead-blue); }
+      .frontend { fill: #9b59b6; stroke: #8e44ad; stroke-width: 2; }
+      .backend { fill: #e67e22; stroke: #d35400; stroke-width: 2; }
+      .ai { fill: #27ae60; stroke: #229954; stroke-width: 2; }
+      .storage { fill: #f39c12; stroke: #e67e22; stroke-width: 2; }
+      .step-num { font: bold 12px sans-serif; text-anchor: middle; fill: white; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#e74c3c"/>
+    </marker>
+    <marker id="arrowhead-blue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#3498db"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="600" y="30" class="title">RAG Chatbot Query Processing Flow</text>
+
+  <!-- Frontend Section -->
+  <rect x="50" y="70" width="200" height="120" rx="10" class="frontend"/>
+  <text x="150" y="95" class="component">FRONTEND</text>
+  <text x="150" y="115" class="component">HTML/CSS/JS</text>
+  <text x="150" y="135" class="component">- Chat Interface</text>
+  <text x="150" y="155" class="component">- Event Handlers</text>
+  <text x="150" y="175" class="component">- API Client</text>
+
+  <!-- Step 1 -->
+  <circle cx="280" cy="130" r="15" fill="#e74c3c"/>
+  <text x="280" y="135" class="step-num">1</text>
+  <text x="305" y="135" class="step-text">User types query & clicks send</text>
+
+  <!-- API Request -->
+  <rect x="50" y="220" width="200" height="80" rx="10" class="frontend"/>
+  <text x="150" y="245" class="component">POST /api/query</text>
+  <text x="150" y="265" class="component">{query, session_id}</text>
+  <text x="150" y="285" class="component">Loading indicator</text>
+
+  <!-- Step 2 -->
+  <circle cx="280" cy="260" r="15" fill="#e74c3c"/>
+  <text x="280" y="265" class="step-num">2</text>
+  <text x="305" y="265" class="step-text">HTTP POST to backend</text>
+
+  <!-- Backend API -->
+  <rect x="450" y="70" width="200" height="120" rx="10" class="backend"/>
+  <text x="550" y="95" class="component">BACKEND API</text>
+  <text x="550" y="115" class="component">FastAPI</text>
+  <text x="550" y="135" class="component">- app.py</text>
+  <text x="550" y="155" class="component">- /api/query endpoint</text>
+  <text x="550" y="175" class="component">- Session management</text>
+
+  <!-- Step 3 -->
+  <circle cx="680" cy="130" r="15" fill="#e74c3c"/>
+  <text x="680" y="135" class="step-num">3</text>
+  <text x="705" y="135" class="step-text">Route to query handler</text>
+
+  <!-- RAG System -->
+  <rect x="450" y="220" width="200" height="100" rx="10" class="backend"/>
+  <text x="550" y="245" class="component">RAG SYSTEM</text>
+  <text x="550" y="265" class="component">rag_system.py</text>
+  <text x="550" y="285" class="component">- Query orchestration</text>
+  <text x="550" y="305" class="component">- History management</text>
+
+  <!-- Step 4 -->
+  <circle cx="680" cy="270" r="15" fill="#e74c3c"/>
+  <text x="680" y="275" class="step-num">4</text>
+  <text x="705" y="275" class="step-text">Process with AI tools</text>
+
+  <!-- AI Generator -->
+  <rect x="800" y="70" width="200" height="120" rx="10" class="ai"/>
+  <text x="900" y="95" class="component">AI GENERATOR</text>
+  <text x="900" y="115" class="component">Anthropic Claude</text>
+  <text x="900" y="135" class="component">- ai_generator.py</text>
+  <text x="900" y="155" class="component">- Tool execution</text>
+  <text x="900" y="175" class="component">- Response synthesis</text>
+
+  <!-- Step 5 -->
+  <circle cx="1030" cy="130" r="15" fill="#e74c3c"/>
+  <text x="1030" y="135" class="step-num">5</text>
+  <text x="1055" y="135" class="step-text">Decide if search needed</text>
+
+  <!-- Search Tool -->
+  <rect x="800" y="220" width="200" height="100" rx="10" class="ai"/>
+  <text x="900" y="245" class="component">SEARCH TOOL</text>
+  <text x="900" y="265" class="component">search_tools.py</text>
+  <text x="900" y="285" class="component">- Course search</text>
+  <text x="900" y="305" class="component">- Result formatting</text>
+
+  <!-- Step 6 -->
+  <circle cx="1030" cy="270" r="15" fill="#e74c3c"/>
+  <text x="1030" y="275" class="step-num">6</text>
+  <text x="1055" y="275" class="step-text">Execute vector search</text>
+
+  <!-- Vector Store -->
+  <rect x="800" y="370" width="200" height="120" rx="10" class="storage"/>
+  <text x="900" y="395" class="component">VECTOR STORE</text>
+  <text x="900" y="415" class="component">ChromaDB</text>
+  <text x="900" y="435" class="component">- vector_store.py</text>
+  <text x="900" y="455" class="component">- Semantic search</text>
+  <text x="900" y="475" class="component">- Course metadata</text>
+
+  <!-- Step 7 -->
+  <circle cx="1030" cy="430" r="15" fill="#e74c3c"/>
+  <text x="1030" y="435" class="step-num">7</text>
+  <text x="1055" y="435" class="step-text">Retrieve relevant content</text>
+
+  <!-- Response Path -->
+  <rect x="450" y="520" width="200" height="80" rx="10" class="backend"/>
+  <text x="550" y="545" class="component">RESPONSE</text>
+  <text x="550" y="565" class="component">- Synthesized answer</text>
+  <text x="550" y="585" class="component">- Source tracking</text>
+
+  <!-- Step 8 -->
+  <circle cx="280" cy="560" r="15" fill="#e74c3c"/>
+  <text x="280" y="565" class="step-num">8</text>
+  <text x="305" y="565" class="step-text">Return to frontend</text>
+
+  <!-- Frontend Response -->
+  <rect x="50" y="520" width="200" height="100" rx="10" class="frontend"/>
+  <text x="150" y="545" class="component">UI UPDATE</text>
+  <text x="150" y="565" class="component">- Remove loading</text>
+  <text x="150" y="585" class="component">- Render markdown</text>
+  <text x="150" y="605" class="component">- Show sources</text>
+
+  <!-- Data Flow Arrows -->
+  <line x1="250" y1="130" x2="450" y2="130" class="data-flow"/>
+  <line x1="250" y1="260" x2="450" y2="260" class="data-flow"/>
+  <line x1="650" y1="130" x2="800" y2="130" class="data-flow"/>
+  <line x1="650" y1="270" x2="800" y2="270" class="data-flow"/>
+  <line x1="900" y1="190" x2="900" y2="220" class="data-flow"/>
+  <line x1="900" y1="320" x2="900" y2="370" class="data-flow"/>
+  
+  <!-- Return flow -->
+  <line x1="800" y1="430" x2="650" y2="430" class="data-flow"/>
+  <line x1="550" y1="430" x2="550" y2="520" class="data-flow"/>
+  <line x1="450" y1="560" x2="250" y2="560" class="data-flow"/>
+
+  <!-- Process flow arrows -->
+  <line x1="150" y1="190" x2="150" y2="220" class="arrow"/>
+  <line x1="550" y1="190" x2="550" y2="220" class="arrow"/>
+  <line x1="900" y1="320" x2="900" y2="370" class="arrow"/>
+  <line x1="150" y1="600" x2="150" y2="520" class="arrow" transform="rotate(180 150 560)"/>
+
+  <!-- Session Management -->
+  <rect x="300" y="370" width="180" height="80" rx="10" fill="#95a5a6" stroke="#7f8c8d" stroke-width="2"/>
+  <text x="390" y="395" class="component" fill="#2c3e50">SESSION MANAGER</text>
+  <text x="390" y="415" class="component" fill="#2c3e50">- Conversation history</text>
+  <text x="390" y="435" class="component" fill="#2c3e50">- Context tracking</text>
+
+  <!-- Legend -->
+  <rect x="50" y="750" width="500" height="120" rx="5" fill="#ecf0f1" stroke="#bdc3c7"/>
+  <text x="60" y="775" style="font: bold 14px sans-serif; fill: #2c3e50;">Legend:</text>
+  
+  <rect x="60" y="790" width="20" height="15" class="frontend"/>
+  <text x="90" y="802" class="step-text">Frontend (HTML/JS)</text>
+  
+  <rect x="200" y="790" width="20" height="15" class="backend"/>
+  <text x="230" y="802" class="step-text">Backend (FastAPI)</text>
+  
+  <rect x="340" y="790" width="20" height="15" class="ai"/>
+  <text x="370" y="802" class="step-text">AI Processing</text>
+  
+  <rect x="480" y="790" width="20" height="15" class="storage"/>
+  <text x="510" y="802" class="step-text">Data Storage</text>
+
+  <line x1="60" y1="820" x2="100" y2="820" class="data-flow"/>
+  <text x="110" y="825" class="step-text">Data Flow</text>
+  
+  <line x1="200" y1="820" x2="240" y2="820" class="arrow"/>
+  <text x="250" y="825" class="step-text">Process Flow</text>
+
+  <circle cx="350" cy="825" r="8" fill="#e74c3c"/>
+  <text x="368" y="830" class="step-text">Step Number</text>
+</svg>
