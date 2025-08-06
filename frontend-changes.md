@@ -1,30 +1,37 @@
-# Frontend Theme Toggle Implementation
+# Frontend Changes - Combined Implementation
 
 ## Overview
+This document outlines both the frontend UI improvements and code quality tools implemented for the RAG chatbot project.
+
+---
+
+## Part 1: Theme Toggle Implementation
+
+### Overview
 Implemented a comprehensive dark and light theme toggle system for the RAG chatbot application with smooth animations, accessibility support, and persistent user preferences.
 
-## Changes Made
+### Changes Made
 
-### 1. HTML Structure (index.html)
+#### 1. HTML Structure (index.html)
 - **Added theme toggle button** to header with sun/moon icons
 - **Restructured header layout** with flex container for better positioning
 - **Added data-theme attribute** to body element for theme switching
 - **Positioned toggle button** in top-right corner as requested
 
-#### Key additions:
+##### Key additions:
 - Theme toggle button with SVG icons (sun for light mode switch, moon for dark mode switch)
 - Accessible button with proper ARIA labels
 - Header content wrapper for flexible layout
 
-### 2. CSS Styling (style.css)
+#### 2. CSS Styling (style.css)
 
-#### Theme System:
+##### Theme System:
 - **Converted existing CSS variables** to theme-specific configurations
 - **Dark theme (default)**: Maintains existing dark color scheme
 - **Light theme**: New light color palette with high contrast
 - **Smooth transitions**: 0.3s cubic-bezier transitions on all theme-sensitive elements
 
-#### Theme Variables:
+##### Theme Variables:
 **Dark Theme:**
 - Background: `#0f172a` (slate-900)
 - Surface: `#1e293b` (slate-800)
@@ -37,85 +44,124 @@ Implemented a comprehensive dark and light theme toggle system for the RAG chatb
 - Text Primary: `#1e293b` (slate-800)
 - Text Secondary: `#64748b` (slate-500)
 
-#### New Components:
+##### New Components:
 - **Theme toggle button**: Circular button with hover effects and smooth icon transitions
 - **Header layout**: Flexible header with title on left, toggle on right
 - **Responsive design**: Maintains functionality on mobile devices
 
-#### Animations:
+##### Animations:
 - **Icon rotation**: Smooth 180° rotation when switching themes
 - **Scale transitions**: Button scaling on hover/active states
 - **Opacity transitions**: Fade between sun and moon icons
 - **Global transitions**: All UI elements transition smoothly between themes
 
-### 3. JavaScript Functionality (script.js)
+#### 3. JavaScript Functionality (script.js)
 
-#### New Functions:
+##### New Functions:
 - `initializeTheme()`: Loads saved theme preference or defaults to dark
 - `toggleTheme()`: Switches between light and dark themes
 - `setTheme(theme)`: Updates DOM and saves preference to localStorage
 
-#### Features:
+##### Features:
 - **Persistent preferences**: Theme choice saved in localStorage
 - **Keyboard accessibility**: Space bar and Enter key support for toggle button
 - **Dynamic ARIA labels**: Updates accessibility labels based on current theme
 - **DOM integration**: Seamless integration with existing chat functionality
 
-#### Event Listeners:
+##### Event Listeners:
 - Click handler for theme toggle
 - Keyboard navigation support (Enter and Space keys)
 - Automatic theme initialization on page load
 
-## Accessibility Features
+### Accessibility Features
 
-### Keyboard Navigation:
+#### Keyboard Navigation:
 - Theme toggle button is fully keyboard accessible
 - Tab navigation works properly
 - Space bar and Enter key trigger theme switch
 
-### Screen Reader Support:
+#### Screen Reader Support:
 - Proper ARIA labels that update dynamically
 - Semantic button element with descriptive text
 - Clear visual focus indicators
 
-### Visual Accessibility:
+#### Visual Accessibility:
 - High contrast ratios in both themes
 - Smooth transitions reduce jarring changes
 - Consistent focus ring styling
 - Scalable icon design
 
-## Technical Implementation Details
+---
 
-### Theme Switching Mechanism:
-1. User clicks/activates theme toggle button
-2. JavaScript toggles `data-theme` attribute on body element
-3. CSS responds with corresponding theme variables
-4. All elements transition smoothly via CSS transitions
-5. Theme preference saved to localStorage for persistence
+## Part 2: Code Quality Implementation
 
-### CSS Architecture:
-- Theme-specific CSS custom properties defined on body[data-theme]
-- Global transition duration and easing variables
-- Component-level transition declarations for smooth theme changes
-- Responsive design maintained across both themes
+### Overview
+This section outlines the code quality tools and workflow improvements implemented for the RAG chatbot project.
 
-### Browser Compatibility:
-- CSS custom properties (IE11+)
-- localStorage (IE8+)
-- CSS transitions (IE10+)
-- SVG icons (IE9+)
+### Changes Made
 
-## File Changes Summary
+#### 1. Black Code Formatter Integration
+- **Added Black as development dependency** using `uv add --dev black>=25.1.0`
+- **Configured Black settings** in `pyproject.toml`:
+  - Line length: 88 characters
+  - Target version: Python 3.13
+  - Excludes: build directories, virtual environments, and ChromaDB data
+
+#### 2. Applied Consistent Formatting
+- **Formatted all Python files** across the entire codebase
+- **17 files reformatted** to ensure consistency:
+  - All backend modules (`*.py`)
+  - All test files (`backend/tests/*.py`)
+  - Main application entry point (`main.py`)
+
+#### 3. Development Scripts
+Created two executable shell scripts for quality management:
+
+##### `format.sh`
+- Quick formatting script using Black
+- Applies consistent code formatting to all Python files
+- Includes error checking for proper project directory
+
+##### `quality.sh` 
+- Comprehensive quality check script
+- Runs formatting and validation
+- Provides clear success/failure feedback
+- Includes compliance checking without modifications
+
+#### 4. Documentation Updates
+Enhanced `CLAUDE.md` with:
+- **New Code Quality section** with formatting commands
+- **Best Practices guidelines** for code style
+- **Development Workflow** steps for quality assurance
+- Clear instructions for running quality checks
+
+---
+
+## Combined File Structure Changes
+
+### New Files Added:
+```
+├── format.sh          # Quick formatting script
+├── quality.sh         # Comprehensive quality checks
+└── frontend-changes.md # This documentation file
+```
 
 ### Modified Files:
-1. **frontend/index.html**: Added theme toggle button and header restructure
-2. **frontend/style.css**: Complete theme system implementation with transitions
-3. **frontend/script.js**: Theme management JavaScript functionality
+```
+├── frontend/index.html    # Added theme toggle button and header restructure
+├── frontend/style.css     # Complete theme system implementation with transitions  
+├── frontend/script.js     # Theme management JavaScript functionality
+├── pyproject.toml        # Added Black configuration
+├── CLAUDE.md             # Updated with quality guidelines
+└── backend/**/*.py       # All Python files reformatted
+```
 
 ### Lines Added/Modified:
 - **HTML**: ~25 lines added (header restructure + button)
 - **CSS**: ~150 lines added/modified (theme variables + toggle styling + transitions)
 - **JavaScript**: ~35 lines added (theme management functions + event handlers)
+
+---
 
 ## Usage Instructions
 
@@ -125,32 +171,35 @@ Implemented a comprehensive dark and light theme toggle system for the RAG chatb
 3. Theme preference is automatically saved and restored on page reload
 
 ### For Developers:
-1. Theme colors can be adjusted in the CSS custom properties
-2. Additional theme-sensitive elements can be added by including transition declarations
-3. New themes can be added by creating additional `[data-theme="new-theme"]` rules
+1. **Format code**: Run `./format.sh` or `uv run black .`
+2. **Quality checks**: Run `./quality.sh` for full validation
+3. **Check compliance**: Run `uv run black --check .` to verify formatting
+4. Theme colors can be adjusted in the CSS custom properties
+5. Additional theme-sensitive elements can be added by including transition declarations
 
-## Testing Completed
+### Integration with Workflow:
+1. Make code changes
+2. Run `./format.sh` to apply formatting
+3. Run `./quality.sh` to validate all quality checks
+4. Commit formatted code
 
-### Functionality:
-- ✅ Theme toggle works correctly
-- ✅ Smooth transitions between themes
-- ✅ Theme persistence across browser sessions
-- ✅ Icons rotate and change properly
+---
 
-### Accessibility:
-- ✅ Keyboard navigation (Tab, Enter, Space)
-- ✅ Screen reader compatibility
-- ✅ Focus indicators visible in both themes
-- ✅ Proper ARIA labeling
+## Technical Configuration
 
-### Responsive Design:
-- ✅ Mobile layout maintained
-- ✅ Header layout responsive
-- ✅ Button sizing appropriate for touch targets
-- ✅ All breakpoints working correctly
+### Black Configuration (`pyproject.toml`):
+```toml
+[tool.black]
+line-length = 88
+target-version = ['py313']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs | \.git | \.hg | \.mypy_cache | \.tox | \.venv
+  | _build | buck-out | build | dist | chroma_db
+)/
+'''
+```
 
-### Visual Quality:
-- ✅ High contrast maintained in both themes
-- ✅ Smooth animations and transitions
-- ✅ Professional aesthetic preserved
-- ✅ Consistent design language
+This combined implementation provides both enhanced user experience through theme switching and a solid foundation for maintaining code quality and consistency throughout the development process.
