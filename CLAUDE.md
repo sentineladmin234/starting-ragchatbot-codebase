@@ -43,6 +43,20 @@ uv sync
 ANTHROPIC_API_KEY=your_anthropic_api_key_here
 ```
 
+### Code Quality
+```bash
+# Format Python code with Black
+./format.sh
+# OR
+uv run black .
+
+# Run all quality checks (format + validation)
+./quality.sh
+
+# Check formatting compliance without making changes
+uv run black --check .
+```
+
 ### Access Points
 - Web Interface: http://localhost:8000
 - API Documentation: http://localhost:8000/docs
@@ -136,3 +150,12 @@ On startup (`app.py` startup event):
 
 ### Code Style
 - Always use descriptive variable names
+- Use Black for consistent Python code formatting (line length: 88 characters)
+- Run `./quality.sh` before committing code changes
+- All Python code should pass Black formatting checks
+
+### Development Workflow
+1. Make code changes
+2. Run `./format.sh` to apply formatting
+3. Run `./quality.sh` to validate all quality checks
+4. Commit formatted code
