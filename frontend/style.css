@@ -5,8 +5,14 @@
     padding: 0;
 }
 
-/* CSS Variables */
+/* CSS Variables for Themes */
 :root {
+    --transition-duration: 0.3s;
+    --transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Dark Theme (Default) */
+body[data-theme="dark"] {
     --primary-color: #2563eb;
     --primary-hover: #1d4ed8;
     --background: #0f172a;
@@ -24,6 +30,25 @@
     --welcome-border: #2563eb;
 }
 
+/* Light Theme */
+body[data-theme="light"] {
+    --primary-color: #2563eb;
+    --primary-hover: #1d4ed8;
+    --background: #ffffff;
+    --surface: #f8fafc;
+    --surface-hover: #e2e8f0;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --border-color: #e2e8f0;
+    --user-message: #2563eb;
+    --assistant-message: #f1f5f9;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --radius: 12px;
+    --focus-ring: rgba(37, 99, 235, 0.2);
+    --welcome-bg: #dbeafe;
+    --welcome-border: #2563eb;
+}
+
 /* Base Styles */
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -34,6 +59,8 @@ body {
     overflow: hidden;
     margin: 0;
     padding: 0;
+    transition: background-color var(--transition-duration) var(--transition-easing),
+                color var(--transition-duration) var(--transition-easing);
 }
 
 /* Container - Full Screen */
@@ -46,9 +73,25 @@ body {
     padding: 0;
 }
 
-/* Header - Hidden */
+/* Header */
 header {
-    display: none;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem 2rem;
+    flex-shrink: 0;
+    transition: all var(--transition-duration) var(--transition-easing);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header-text {
+    flex: 1;
 }
 
 header h1 {
@@ -59,6 +102,67 @@ header h1 {
     -webkit-text-fill-color: transparent;
     background-clip: text;
     margin: 0;
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: var(--surface-hover);
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all var(--transition-duration) var(--transition-easing);
+    position: relative;
+    overflow: hidden;
+    color: var(--text-primary);
+}
+
+.theme-toggle:hover {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+    transform: scale(1.05);
+}
+
+.theme-toggle:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.theme-toggle:active {
+    transform: scale(0.95);
+}
+
+.theme-icon {
+    position: absolute;
+    transition: all var(--transition-duration) var(--transition-easing);
+    transform-origin: center;
+}
+
+/* Dark theme - show sun icon */
+body[data-theme="dark"] .theme-icon-light {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+}
+
+body[data-theme="dark"] .theme-icon-dark {
+    opacity: 0;
+    transform: rotate(180deg) scale(0.8);
+}
+
+/* Light theme - show moon icon */
+body[data-theme="light"] .theme-icon-light {
+    opacity: 0;
+    transform: rotate(-180deg) scale(0.8);
+}
+
+body[data-theme="light"] .theme-icon-dark {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
 }
 
 .subtitle {
@@ -73,6 +177,7 @@ header h1 {
     display: flex;
     overflow: hidden;
     background: var(--background);
+    transition: background-color var(--transition-duration) var(--transition-easing);
 }
 
 /* Left Sidebar */
@@ -83,6 +188,7 @@ header h1 {
     padding: 1.5rem;
     overflow-y: auto;
     flex-shrink: 0;
+    transition: all var(--transition-duration) var(--transition-easing);
 }
 
 /* Custom Scrollbar for Sidebar */
@@ -131,6 +237,7 @@ header h1 {
     width: 100%;
     max-width: 800px;
     margin: 0;
+    transition: background-color var(--transition-duration) var(--transition-easing);
 }
 
 /* Chat Messages */
@@ -142,6 +249,7 @@ header h1 {
     flex-direction: column;
     gap: 1rem;
     background: var(--background);
+    transition: background-color var(--transition-duration) var(--transition-easing);
 }
 
 /* Custom Scrollbar */
@@ -192,6 +300,7 @@ header h1 {
     border-radius: 18px;
     word-wrap: break-word;
     line-height: 1.5;
+    transition: all var(--transition-duration) var(--transition-easing);
 }
 
 .message.user .message-content {
@@ -256,7 +365,7 @@ header h1 {
     border-radius: 6px;
     font-size: 0.75rem;
     font-weight: 500;
-    transition: all 0.2s ease;
+    transition: all var(--transition-duration) var(--transition-easing);
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -363,6 +472,7 @@ header h1 {
     background: var(--background);
     border-top: 1px solid var(--border-color);
     flex-shrink: 0;
+    transition: all var(--transition-duration) var(--transition-easing);
 }
 
 /* Chat Input */
@@ -374,7 +484,7 @@ header h1 {
     border-radius: 24px;
     color: var(--text-primary);
     font-size: 0.95rem;
-    transition: all 0.2s ease;
+    transition: all var(--transition-duration) var(--transition-easing);
 }
 
 #chatInput:focus {
@@ -398,7 +508,7 @@ header h1 {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s ease;
+    transition: all var(--transition-duration) var(--transition-easing);
     min-width: 52px;
 }
 
@@ -537,6 +647,7 @@ details[open] .suggested-header::before {
     border-radius: 8px;
     border: 1px solid var(--border-color);
     margin-bottom: 0.75rem;
+    transition: all var(--transition-duration) var(--transition-easing);
 }
 
 .stat-item:last-child {
@@ -671,7 +782,7 @@ details[open] .suggested-header::before {
     color: var(--text-primary);
     font-size: 0.875rem;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all var(--transition-duration) var(--transition-easing);
     text-align: left;
     width: 100%;
 }
@@ -728,8 +839,23 @@ details[open] .suggested-header::before {
         padding: 1rem;
     }
     
+    .header-content {
+        flex-direction: row;
+        gap: 1rem;
+    }
+    
+    .header-text {
+        flex: 1;
+    }
+    
     header h1 {
         font-size: 1.5rem;
+    }
+    
+    .theme-toggle {
+        width: 40px;
+        height: 40px;
+        flex-shrink: 0;
     }
     
     .chat-messages {
