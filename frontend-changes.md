@@ -1,11 +1,11 @@
-# Frontend Changes - Combined Implementation
+# Complete Feature Implementation Changes
 
 ## Overview
-This document outlines both the frontend UI improvements and code quality tools implemented for the RAG chatbot project.
+This document outlines all the enhancements implemented for the RAG chatbot project, including frontend UI improvements, code quality tools, and comprehensive testing framework.
 
 ---
 
-## Part 1: Theme Toggle Implementation
+## Part 1: Theme Toggle Implementation (UI Feature)
 
 ### Overview
 Implemented a comprehensive dark and light theme toggle system for the RAG chatbot application with smooth animations, accessibility support, and persistent user preferences.
@@ -49,12 +49,6 @@ Implemented a comprehensive dark and light theme toggle system for the RAG chatb
 - **Header layout**: Flexible header with title on left, toggle on right
 - **Responsive design**: Maintains functionality on mobile devices
 
-##### Animations:
-- **Icon rotation**: Smooth 180° rotation when switching themes
-- **Scale transitions**: Button scaling on hover/active states
-- **Opacity transitions**: Fade between sun and moon icons
-- **Global transitions**: All UI elements transition smoothly between themes
-
 #### 3. JavaScript Functionality (script.js)
 
 ##### New Functions:
@@ -66,34 +60,10 @@ Implemented a comprehensive dark and light theme toggle system for the RAG chatb
 - **Persistent preferences**: Theme choice saved in localStorage
 - **Keyboard accessibility**: Space bar and Enter key support for toggle button
 - **Dynamic ARIA labels**: Updates accessibility labels based on current theme
-- **DOM integration**: Seamless integration with existing chat functionality
-
-##### Event Listeners:
-- Click handler for theme toggle
-- Keyboard navigation support (Enter and Space keys)
-- Automatic theme initialization on page load
-
-### Accessibility Features
-
-#### Keyboard Navigation:
-- Theme toggle button is fully keyboard accessible
-- Tab navigation works properly
-- Space bar and Enter key trigger theme switch
-
-#### Screen Reader Support:
-- Proper ARIA labels that update dynamically
-- Semantic button element with descriptive text
-- Clear visual focus indicators
-
-#### Visual Accessibility:
-- High contrast ratios in both themes
-- Smooth transitions reduce jarring changes
-- Consistent focus ring styling
-- Scalable icon design
 
 ---
 
-## Part 2: Code Quality Implementation
+## Part 2: Code Quality Implementation (Quality Feature)
 
 ### Overview
 This section outlines the code quality tools and workflow improvements implemented for the RAG chatbot project.
@@ -128,12 +98,85 @@ Created two executable shell scripts for quality management:
 - Provides clear success/failure feedback
 - Includes compliance checking without modifications
 
-#### 4. Documentation Updates
-Enhanced `CLAUDE.md` with:
-- **New Code Quality section** with formatting commands
-- **Best Practices guidelines** for code style
-- **Development Workflow** steps for quality assurance
-- Clear instructions for running quality checks
+---
+
+## Part 3: Testing Framework Enhancement (Testing Feature)
+
+### Overview
+Enhanced the testing infrastructure with comprehensive API endpoint testing, improved pytest configuration, and shared test fixtures.
+
+### Changes Made
+
+#### 1. Enhanced pytest Configuration (`pyproject.toml`)
+
+**Added dependencies:**
+- `pytest>=7.0.0` - Modern testing framework
+- `httpx>=0.24.0` - Async HTTP client for FastAPI testing
+
+**Added pytest configuration:**
+```toml
+[tool.pytest.ini_options]
+testpaths = ["backend/tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "-v",
+    "--tb=short", 
+    "--strict-markers",
+    "--disable-warnings",
+]
+markers = [
+    "unit: Unit tests",
+    "integration: Integration tests",
+    "api: API endpoint tests",
+]
+```
+
+#### 2. Shared Test Fixtures (`backend/tests/conftest.py`)
+
+**New file created** with comprehensive test fixtures:
+
+- `temp_dir()` - Isolated temporary directory for each test
+- `test_config()` - Test configuration with fixed MAX_RESULTS bug
+- `mock_anthropic_client()` - Mocked Anthropic API client to avoid real API calls
+- `mock_anthropic_with_tool_use()` - Mocked client that simulates tool usage workflow
+- `test_rag_system()` - Pre-configured RAG system for testing
+- `sample_sources()` - Sample SourceWithLink data
+- `sample_query_requests()` - Sample API request payloads
+- `sample_query_responses()` - Sample API response payloads
+- `sample_course_stats()` - Sample course statistics data
+- `setup_test_environment()` - Session-wide test environment setup
+- `mock_file_operations()` - File system operation mocking
+
+#### 3. API Endpoint Tests (`backend/tests/test_api_endpoints.py`)
+
+**New comprehensive test file** covering all FastAPI endpoints:
+
+##### Test Architecture
+- **Isolated Test App**: Creates a separate FastAPI app without static file mounting
+- **Mock Integration**: Uses shared fixtures for consistent mocking
+- **Full Coverage**: Tests success cases, edge cases, and error conditions
+
+##### Endpoints Tested
+
+**POST /api/query**
+- Query without session ID (auto-creates session)
+- Query with existing session ID  
+- Empty query handling
+- Missing query field validation
+- Invalid JSON handling
+- RAG system exception handling
+
+**GET /api/courses**
+- Successful course statistics retrieval
+- Empty course list handling
+- Analytics system exception handling
+
+**POST /api/new-chat**
+- New chat without session ID
+- New chat with session clearing
+- Session clearing exception handling
 
 ---
 
@@ -141,9 +184,11 @@ Enhanced `CLAUDE.md` with:
 
 ### New Files Added:
 ```
-├── format.sh          # Quick formatting script
-├── quality.sh         # Comprehensive quality checks
-└── frontend-changes.md # This documentation file
+├── format.sh                        # Quick formatting script
+├── quality.sh                       # Comprehensive quality checks
+├── backend/tests/conftest.py         # Shared test fixtures and configuration
+├── backend/tests/test_api_endpoints.py # Comprehensive API endpoint tests
+└── frontend-changes.md               # This documentation file
 ```
 
 ### Modified Files:
@@ -151,7 +196,7 @@ Enhanced `CLAUDE.md` with:
 ├── frontend/index.html    # Added theme toggle button and header restructure
 ├── frontend/style.css     # Complete theme system implementation with transitions  
 ├── frontend/script.js     # Theme management JavaScript functionality
-├── pyproject.toml        # Added Black configuration
+├── pyproject.toml        # Added Black configuration and pytest setup
 ├── CLAUDE.md             # Updated with quality guidelines
 └── backend/**/*.py       # All Python files reformatted
 ```
@@ -160,6 +205,7 @@ Enhanced `CLAUDE.md` with:
 - **HTML**: ~25 lines added (header restructure + button)
 - **CSS**: ~150 lines added/modified (theme variables + toggle styling + transitions)
 - **JavaScript**: ~35 lines added (theme management functions + event handlers)
+- **Python Test Files**: ~500+ lines added (comprehensive test coverage)
 
 ---
 
@@ -171,17 +217,36 @@ Enhanced `CLAUDE.md` with:
 3. Theme preference is automatically saved and restored on page reload
 
 ### For Developers:
+
+#### Code Quality:
 1. **Format code**: Run `./format.sh` or `uv run black .`
 2. **Quality checks**: Run `./quality.sh` for full validation
 3. **Check compliance**: Run `uv run black --check .` to verify formatting
-4. Theme colors can be adjusted in the CSS custom properties
-5. Additional theme-sensitive elements can be added by including transition declarations
 
-### Integration with Workflow:
+#### Testing:
+```bash
+# Install dependencies
+uv sync
+
+# Run all tests
+uv run pytest
+
+# Run only API tests
+uv run pytest -m api
+
+# Run with verbose output
+uv run pytest -v
+
+# Run specific test file
+uv run pytest backend/tests/test_api_endpoints.py
+```
+
+#### Integration with Workflow:
 1. Make code changes
 2. Run `./format.sh` to apply formatting
 3. Run `./quality.sh` to validate all quality checks
-4. Commit formatted code
+4. Run `uv run pytest` to ensure all tests pass
+5. Commit formatted and tested code
 
 ---
 
@@ -202,4 +267,37 @@ extend-exclude = '''
 '''
 ```
 
-This combined implementation provides both enhanced user experience through theme switching and a solid foundation for maintaining code quality and consistency throughout the development process.
+### Pytest Configuration (`pyproject.toml`):
+```toml
+[tool.pytest.ini_options]
+testpaths = ["backend/tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = ["-v", "--tb=short", "--strict-markers", "--disable-warnings"]
+markers = ["unit: Unit tests", "integration: Integration tests", "api: API endpoint tests"]
+```
+
+---
+
+## Impact and Benefits
+
+### User Experience
+- Enhanced visual experience with theme switching
+- Improved accessibility and keyboard navigation
+- Persistent user preferences
+
+### Code Quality
+- Uniform formatting across all Python files
+- Consistent line lengths (88 characters)
+- Automated formatting validation
+- Reduced manual formatting effort
+
+### Testing Coverage
+- **Before**: Unit tests for individual components
+- **After**: Full API endpoint testing + unit tests + integration scenarios
+- Faster test execution with proper pytest configuration
+- No external API dependencies during testing
+- Comprehensive error scenario coverage
+
+This complete implementation provides enhanced user experience, solid code quality foundation, and comprehensive testing infrastructure for confident development and maintenance of the RAG chatbot system.
