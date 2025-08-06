@@ -11,6 +11,7 @@ import os
 
 from config import config
 from rag_system import RAGSystem
+from models import SourceWithLink
 
 # Initialize FastAPI app
 app = FastAPI(title="Course Materials RAG System", root_path="")
@@ -43,13 +44,22 @@ class QueryRequest(BaseModel):
 class QueryResponse(BaseModel):
     """Response model for course queries"""
     answer: str
-    sources: List[str]
+    sources: List[SourceWithLink]
     session_id: str
 
 class CourseStats(BaseModel):
     """Response model for course statistics"""
     total_courses: int
     course_titles: List[str]
+
+class NewChatRequest(BaseModel):
+    """Request model for starting new chat"""
+    session_id: Optional[str] = None
+
+class NewChatResponse(BaseModel):
+    """Response model for new chat"""
+    success: bool
+    message: str
 
 # API Endpoints
 
@@ -81,6 +91,21 @@ async def get_course_stats():
         return CourseStats(
             total_courses=analytics["total_courses"],
             course_titles=analytics["course_titles"]
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/new-chat", response_model=NewChatResponse)
+async def start_new_chat(request: NewChatRequest):
+    """Clear session and start a new chat"""
+    try:
+        # Clear the session if it exists
+        if request.session_id:
+            rag_system.session_manager.clear_session(request.session_id)
+        
+        return NewChatResponse(
+            success=True,
+            message="New chat session started successfully"
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
